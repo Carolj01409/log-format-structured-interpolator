@@ -37,3 +37,10 @@ The trade-off: only `%s` is supported. Real printf has dozens of conversion char
 ## Edge you will hit
 
 `%%` is treated as a literal percent and does **not** consume an argument. A format string with mismatched argument count — too few or too many — raises `InterpolationError`. Any conversion character other than `s` (`%d`, `%f`, etc.) also raises `InterpolationError`; there is no silent fallback.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
